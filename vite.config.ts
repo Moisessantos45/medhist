@@ -13,11 +13,13 @@ export default defineConfig({
   },
   server: {
     port:3201,
+    host: true,
+    allowedHosts: ['medhist.mmabitec.me',"www.medhist.mmabitec.me"],
     sourcemapIgnoreList: () => true,
   },
   preview:{
     port:3201,
-    host: '127.0.0.1',
+    host: true,
     allowedHosts: ['medhist.mmabitec.me',"www.medhist.mmabitec.me"],
   },
   css: {
