@@ -8,6 +8,7 @@ type ListPatientsProps = {
   loading: boolean;
   pagination: Pagination;
   onPageChange?: (page: number) => void;
+  onAdd?: () => void;
   renderItem: (patient: Patient) => ReactNode;
 };
 
@@ -17,6 +18,7 @@ const ListPatients = ({
   pagination,
   renderItem,
   onPageChange,
+  onAdd,
 }: ListPatientsProps) => {
   if (loading) return <div>Cargando pacientes...</div>;
 
@@ -42,15 +44,50 @@ const ListPatients = ({
           )}
         </>
       ) : (
-        <>
-          <h2 className="font-black text-center text-2xl text-slate-800">
-            No hay pacientes{" "}
+        <div className="flex flex-col items-center justify-center py-20 gap-4">
+          <div className="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-10 h-10 text-indigo-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17 20h5v-2a4 4 0 00-4-4h-1M9 20H4v-2a4 4 0 014-4h1m4-4a4 4 0 100-8 4 4 0 000 8zm6 4a2 2 0 100-4 2 2 0 000 4zM3 14a2 2 0 100-4 2 2 0 000 4z"
+              />
+            </svg>
+          </div>
+          <h2 className="font-black text-2xl text-slate-800">
+            No hay pacientes
           </h2>
-          <p className="text-slate-500 text-sm mt-2 mb-8 text-center max-w-sm mx-auto">
-            Los pacientes agregados se visualizarán {""}
-            <span className="text-indigo-600 font-bold">en este apartado</span>
+          <p className="text-slate-500 text-sm text-center max-w-xs">
+            Aún no tienes pacientes registrados.{" "}
+            <span className="text-indigo-600 font-bold">¡Agrega el primero!</span>
           </p>
-        </>
+          {onAdd && (
+            <button
+              type="button"
+              onClick={onAdd}
+              className="mt-2 cursor-pointer inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-xl shadow-md shadow-indigo-200 transition-all duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Añadir paciente
+            </button>
+          )}
+        </div>
       )}
     </>
   );
