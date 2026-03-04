@@ -12,6 +12,12 @@ interface AuthState {
   alertState: AlertProps;
   getSession: () => Promise<void>;
   getToken: () => string | null;
+  register: (
+    email: string,
+    password: string,
+    name: string,
+    phone: string,
+  ) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
@@ -40,6 +46,38 @@ const useAuthStore = create<AuthState>((set, get) => ({
   },
   getToken: () => {
     return localStorage.getItem("authToken");
+  },
+  register: async (
+    email: string,
+    password: string,
+    name: string,
+    phone: string,
+  ) => {
+    set({ loading: true });
+    try {
+      await apiAuth.post("/veterinarian/register", {
+        name,
+        email,
+        password,
+        phone,
+      });
+
+      set({
+        alertState: {
+          error: false,
+          msg: "Registro exitoso, por favor inicia sesión",
+        },
+      });
+    } catch (error) {
+      const { msg } = ErrorHandler(error);
+      set({ alertState: { error: true, msg } });
+    } finally {
+      setTimeout(() => {
+        set({ alertState: { error: false, msg: "" } });
+      }, 3000);
+
+      set({ loading: false });
+    }
   },
   login: async (email: string, password: string) => {
     set({ loading: true });

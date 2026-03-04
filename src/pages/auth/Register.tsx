@@ -1,10 +1,8 @@
-import { useReducer, useState, type SubmitEvent } from "react";
-import type { AlertProps } from "@/components/molecules/Alert";
+import { useReducer, type SubmitEvent } from "react";
 import Alert from "@/components/molecules/Alert";
 import { Link } from "react-router";
-import { apiAuth } from "@/services/api";
-import ErrorHandler from "@/services/errorHandler";
 import Input from "@/components/atoms/Input";
+import useAuthStore from "@/store/auth";
 
 type FormState = {
   userName: string;
@@ -15,15 +13,12 @@ type FormState = {
 };
 
 const Register = () => {
+  const { alertState, setAlertState, register, loading } = useAuthStore();
   const [form, dispatch] = useReducer(
     (state: FormState, action: Partial<FormState>) => ({ ...state, ...action }),
-    { userName: "", email: "", phone: "", password: "", confirmPassword: "" }
+    { userName: "", email: "", phone: "", password: "", confirmPassword: "" },
   );
   const { userName, email, phone, password, confirmPassword } = form;
-  const [alertState, setAlertState] = useState<AlertProps>({
-    error: false,
-    msg: "",
-  });
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,23 +44,7 @@ const Register = () => {
       return;
     }
 
-    setAlertState({ msg: "", error: false });
-    try {
-      await apiAuth.post("/veterinarian/register", {
-        name: userName,
-        email,
-        phone,
-        password,
-      });
-
-      setAlertState({
-        msg: "verifica tu correo confirma tu cuenta",
-        error: false,
-      });
-    } catch (error) {
-      const { msg } = ErrorHandler(error);
-      setAlertState({ msg, error: true });
-    }
+    await register(email, password, userName, phone);
   };
 
   const { msg } = alertState;
@@ -77,16 +56,19 @@ const Register = () => {
           <span className="text-slate-800 font-black">Hist</span>
         </h1>
 
-        <h1 className="text-2xl font-bold mb-3">
-          Crea una cuenta
-        </h1>
+        <h1 className="text-2xl font-bold mb-3">Crea una cuenta</h1>
         <p className="text-sm text-slate-500 mb-8 max-w-xs mx-auto">
-          Regístrate para administrar a tus <span className="text-indigo-600 font-bold">pacientes</span>
+          Regístrate para administrar a tus{" "}
+          <span className="text-indigo-600 font-bold">pacientes</span>
         </p>
       </div>
 
       <div className="bg-white shadow-sm shadow-slate-200/50 border border-slate-200 mt-3 md:mt-0 px-8 py-10 rounded-xl w-full max-w-lg mx-auto">
-        {msg && <div className="mb-6"><Alert {...alertState} /></div>}
+        {msg && (
+          <div className="mb-6">
+            <Alert {...alertState} />
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <Input
@@ -148,6 +130,7 @@ const Register = () => {
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full py-3 bg-indigo-600 text-white font-bold uppercase text-xs tracking-wider rounded-lg shadow-sm transition-colors hover:bg-slate-800 mt-4 cursor-pointer"
           >
             Crear cuenta
@@ -155,7 +138,10 @@ const Register = () => {
         </form>
 
         <nav className="mt-8 flex flex-col items-center gap-3">
-          <Link className="text-xs text-slate-500 hover:text-indigo-600 transition-colors font-bold uppercase tracking-wider" to="/">
+          <Link
+            className="text-xs text-slate-500 hover:text-indigo-600 transition-colors font-bold uppercase tracking-wider"
+            to="/"
+          >
             ¿Ya tienes cuenta? Inicia sesión
           </Link>
           <Link
