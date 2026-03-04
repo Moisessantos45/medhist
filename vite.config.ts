@@ -19,9 +19,7 @@ export default defineConfig({
   },
   build: {
     sourcemap: false,
-    minify: "esbuild",
-    rollupOptions: {
-      output: {},
-    },
+    minify: "oxc",
+    rollupOptions: { output: {} },
   },
 });
