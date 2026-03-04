@@ -18,6 +18,7 @@ export default defineConfig({
   preview:{
     port:3201,
     host: '127.0.0.1',
+    allowedHosts: ['medhist.mmabitec.me',"www.medhist.mmabitec.me"],
   },
   css: {
     devSourcemap: false,
