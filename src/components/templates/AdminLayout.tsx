@@ -1,15 +1,20 @@
 import useAuthStore from "@/store/auth";
-import { Outlet, Navigate } from "react-router";
+import { Outlet, Navigate, useLocation } from "react-router";
 import HeaderFeature from "@/features/layout/components/HeaderFeature";
 import Footer from "../organisms/Footer";
 import { useEffect } from "react";
 
 const AdminLayout = () => {
   const { authenticated, loading, getSession } = useAuthStore();
-  
+  const { pathname } = useLocation();
+
   useEffect(() => {
     getSession();
   }, [getSession]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
 
 
   if (loading)
