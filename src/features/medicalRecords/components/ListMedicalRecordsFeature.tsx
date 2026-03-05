@@ -4,7 +4,7 @@ import ItemMedicalRecordFeature from "./ItemMedicalRecordFeature";
 import { useEffect } from "react";
 
 const ListMedicalRecordsFeature = ({ patientId }: { patientId: number }) => {
-  const { list, pagination, loading, changePage, getAll } =
+  const { list, pagination, loading, changePage, getAll, setShowForm } =
     useMedicalRecordStore();
 
   useEffect(() => {
@@ -19,6 +19,10 @@ const ListMedicalRecordsFeature = ({ patientId }: { patientId: number }) => {
       loading={loading}
       pagination={pagination}
       onPageChange={(page) => changePage(patientId, page)}
+      onAdd={() => {
+        setShowForm(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
       renderItem={(record) => (
         <ItemMedicalRecordFeature key={record.id} record={record} />
       )}

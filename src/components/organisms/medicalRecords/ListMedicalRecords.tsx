@@ -8,6 +8,7 @@ type ListMedicalRecordsProps = {
   loading: boolean;
   pagination: Pagination;
   onPageChange?: (page: number) => void;
+  onAdd?: () => void;
   renderItem: (record: MedicalRecord) => ReactNode;
 };
 
@@ -17,6 +18,7 @@ const ListMedicalRecords = ({
   pagination,
   onPageChange,
   renderItem,
+  onAdd,
 }: ListMedicalRecordsProps) => {
   if (loading) return <div>Cargando historial médico...</div>;
 
@@ -38,15 +40,56 @@ const ListMedicalRecords = ({
           </section>
         </>
       ) : (
-        <>
-          <h2 className="font-black text-center text-2xl text-slate-800">
+        <div className="flex flex-col items-center justify-center py-20 gap-4">
+          <div className="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-8 h-8 text-indigo-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <h2 className="font-black text-2xl text-slate-800">
             No hay registros médicos
           </h2>
-          <p className="text-slate-500 text-sm mt-2 mb-8 text-center max-w-sm mx-auto">
-            Las consultas que registres se visualizarán {""}
-            <span className="text-indigo-600 font-bold">aquí</span>
+          <p className="text-slate-500 text-sm text-center max-w-xs">
+            Aún no tienes registros médicos registrados.{" "}
+            <span className="text-indigo-600 font-bold">
+              ¡Agrega el primero!
+            </span>
           </p>
-        </>
+          {onAdd && (
+            <button
+              type="button"
+              onClick={onAdd}
+              className="mt-2 cursor-pointer inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-xl shadow-md shadow-indigo-200 transition-all duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Añadir registro médico
+            </button>
+          )}
+        </div>
       )}
 
       {pagination.total_pages > 1 && (

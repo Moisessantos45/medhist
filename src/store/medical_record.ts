@@ -19,6 +19,7 @@ interface MedicalRecordState {
   loading: boolean;
   alertState: AlertProps;
   pagination: Pagination;
+  showForm: boolean;
   changePage: (id: number, page: number) => void;
   getAll: (id: number, page?: number) => Promise<void>;
   register: (data: Partial<MedicalRecord>) => Promise<void>;
@@ -26,12 +27,14 @@ interface MedicalRecordState {
   remove: (id: number) => Promise<void>;
   updateField: (field: keyof Partial<MedicalRecord>, value: string) => void;
   clearData: () => void;
+  closeForm: () => void;
 
   setData: (data: MedicalRecord) => void;
   setList: (data: MedicalRecord[]) => void;
   setLoading: (loading: boolean) => void;
   setAlertState: (state: AlertProps) => void;
   setPagination: (pagination: Pagination) => void;
+  setShowForm: (show: boolean) => void;
 }
 
 const useMedicalRecordStore = create<MedicalRecordState>((set, get) => ({
@@ -40,6 +43,7 @@ const useMedicalRecordStore = create<MedicalRecordState>((set, get) => ({
   loading: false,
   alertState: { error: false, msg: "" },
   pagination: { ...initialPagination },
+  showForm: false,
 
   changePage: (id, page) => {
     get().setPagination({ ...get().pagination, page });
@@ -197,12 +201,16 @@ const useMedicalRecordStore = create<MedicalRecordState>((set, get) => ({
   clearData: () => {
     set({ data: { ...initialMedicalRecord } });
   },
+  closeForm: () => {
+    set({ showForm: false, data: { ...initialMedicalRecord } });
+  },
 
   setData: (data) => set({ data }),
   setList: (list) => set({ list }),
   setLoading: (loading) => set({ loading }),
   setAlertState: (alertState) => set({ alertState }),
   setPagination: (pagination) => set({ pagination }),
+  setShowForm: (showForm) => set({ showForm }),
 }));
 
 export default useMedicalRecordStore;

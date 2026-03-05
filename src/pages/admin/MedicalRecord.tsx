@@ -1,38 +1,40 @@
 import { useParams } from "react-router";
-import { useState } from "react";
 import useUrlStore from "@/store/url";
 import ReturnLink from "@/components/atoms/ReturnLink";
 import FormMedicalRecordFeature from "@/features/medicalRecords/components/FormMedicalRecordFeature";
 import ListMedicalRecordsFeature from "@/features/medicalRecords/components/ListMedicalRecordsFeature";
+import useMedicalRecordStore from "@/store/medical_record";
 
 const MedicalRecord = () => {
   const { getUrl } = useUrlStore();
-  const [hiddenForm, setHiddenForm] = useState(true);
+  const { list, showForm, setShowForm } = useMedicalRecordStore();
   const { id } = useParams<{ id: string }>();
 
   return (
-    <section className="flex flex-col gap-2 p-4 justify-center">
-      <div className="flex flex-row mx-auto gap-2 mb-2 justify-start w-full">
+    <section className="flex flex-col gap-6 p-4">
+      <nav>
         <ReturnLink to={`${getUrl()}`} title="regresar" />
+      </nav>
+      {(list.length > 0 || !showForm) && (
         <button
           type="button"
-          className="bg-indigo-600 uppercase font-bold py-2 px-4 rounded-md text-white md:hidden"
-          onClick={() => setHiddenForm(!hiddenForm)}
+          className="bg-indigo-600 uppercase font-bold mx-10 p-3 rounded-md text-white mb-10 md:hidden"
+          onClick={() => setShowForm(!showForm)}
         >
-          {" "}
-          {hiddenForm ? "Ocultar Form" : "Mostrar Form"}
+          {showForm ? "Ocultar Form" : "Mostrar Form"}
         </button>
-      </div>
+      )}
 
       <section className="flex gap-3 flex-col md:flex-row w-full justify-center">
         <div
-          className={`${
-            hiddenForm ? "block" : "hidden"
-          } md:block md:w-1/2 lg:w-2/5 my-2`}
+          className={` ${showForm || list.length < 1 ? "block" : "hidden"}
+        ${list.length > 0 || showForm ? "md:block" : "hidden"} md:w-1/2 lg:w-2/5`}
         >
           <FormMedicalRecordFeature patientId={Number(id)} />
         </div>
-        <div className="md:w-1/2 lg:w-3/6">
+        <div
+          className={`${list.length < 1 ? "h-screen" : "h-auto"} md:w-1/2 lg:w-3/6`}
+        >
           <ListMedicalRecordsFeature patientId={Number(id)} />
         </div>
       </section>

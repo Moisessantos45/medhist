@@ -6,6 +6,7 @@ import Alert from "@/components/molecules/Alert";
 type FormMedicalRecordProps = {
   data: Partial<MedicalRecord>;
   alertState: { msg: string; error: boolean };
+  hiddenButton: boolean;
   onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
   onChange: (field: keyof MedicalRecord, value: string) => void;
   onCancel: () => void;
@@ -14,6 +15,7 @@ type FormMedicalRecordProps = {
 const FormMedicalRecord = ({
   data,
   alertState,
+  hiddenButton,
   onSubmit,
   onChange,
   onCancel,
@@ -21,7 +23,30 @@ const FormMedicalRecord = ({
   const { msg } = alertState;
 
   return (
-    <div className="bg-white px-6 py-8 border border-slate-200 shadow-sm shadow-slate-200/50 rounded-xl mb-8">
+    <div className="bg-white px-6 py-8 border border-slate-200 shadow-sm shadow-slate-200/50 rounded-xl mb-8 relative">
+      {hiddenButton && (
+        <button
+          type="button"
+          className="text-slate-400 hover:text-slate-600 transition-colors absolute top-4 right-4"
+          onClick={onCancel}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      )}
+
       <h2 className="font-black text-center text-2xl text-slate-800 mb-2">
         {data?.id ? "Editar Registro" : "Nuevo Registro"}
       </h2>
@@ -31,7 +56,6 @@ const FormMedicalRecord = ({
       </p>
 
       <form onSubmit={onSubmit} className="flex flex-col gap-1">
-        {/* Row 1: Fecha */}
         <div className="mb-2">
           <Input
             label="Fecha de Visita"
@@ -47,7 +71,6 @@ const FormMedicalRecord = ({
           />
         </div>
 
-        {/* Row 2: Vitals */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5">
           <Input
             label="Peso (kg)"
@@ -72,7 +95,6 @@ const FormMedicalRecord = ({
           />
         </div>
 
-        {/* Textareas */}
         <div className="mb-5">
           <label
             htmlFor="diagnosis"
@@ -131,7 +153,9 @@ const FormMedicalRecord = ({
               className="block text-xs uppercase tracking-wider font-bold text-slate-600 mb-2 pl-1"
             >
               Notas adicionales{" "}
-              <span className="text-slate-400 font-normal lowercase tracking-normal">(Opcional)</span>
+              <span className="text-slate-400 font-normal lowercase tracking-normal">
+                (Opcional)
+              </span>
             </label>
             <textarea
               id="notes"
@@ -143,7 +167,6 @@ const FormMedicalRecord = ({
           </div>
         </div>
 
-        {/* Acciones */}
         <div className="flex flex-col sm:flex-row gap-3 mt-4">
           <button
             type="submit"

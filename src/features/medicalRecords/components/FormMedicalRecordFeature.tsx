@@ -6,11 +6,13 @@ const FormMedicalRecordFeature = ({ patientId }: { patientId: number }) => {
   const {
     data,
     alertState,
+    showForm,
     setAlertState,
     updateField,
     clearData,
     register,
     updateProfile,
+    closeForm
   } = useMedicalRecordStore();
   const id = data?.id || null;
 
@@ -32,9 +34,13 @@ const FormMedicalRecordFeature = ({ patientId }: { patientId: number }) => {
     <FormMedicalRecord
       data={data}
       alertState={alertState}
+      hiddenButton={showForm}
       onSubmit={handleSubmit}
       onChange={updateField}
-      onCancel={clearData}
+      onCancel={() => {
+        clearData();
+        closeForm();
+      }}
     />
   );
 };
