@@ -4,7 +4,8 @@ import ListAppointments from "@/components/organisms/appointments/ListAppointmen
 import ItemAppointmentFeature from "./ItemAppointmentFeature";
 
 const ListAppointmentsFeature = ({ patientId }: { patientId: number }) => {
-  const { list, pagination, getAll, changePage } = useAppointmentStore();
+  const { list, pagination, getAll, changePage, setShowForm } =
+    useAppointmentStore();
 
   useEffect(() => {
     if (patientId) {
@@ -17,6 +18,10 @@ const ListAppointmentsFeature = ({ patientId }: { patientId: number }) => {
       list={list}
       pagination={pagination}
       onPageChange={(page) => changePage(patientId, page)}
+      onAdd={() => {
+        setShowForm(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
       renderItem={(appointment) => (
         <ItemAppointmentFeature
           key={appointment.id}
