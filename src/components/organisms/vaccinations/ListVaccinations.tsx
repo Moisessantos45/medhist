@@ -20,36 +20,45 @@ const ListVaccinations = ({
 }: ListVaccinationsProps) => {
   return (
     <>
-      <h2 className="font-black text-2xl text-slate-800 text-center">
-        Cartilla de Vacunación
-      </h2>
-      <p className="text-slate-500 text-sm mt-2 mb-8 text-center max-w-sm mx-auto">
-        Revisa y administra {""}
-        <span className="text-indigo-600 font-bold">el control de vacunas</span>
-      </p>
-
-      {list.length ? (
-        <div className="flex flex-col gap-4">{list.map(renderItem)}</div>
+      {list.length > 1 ? (
+        <>
+          <h2 className="font-black text-2xl text-slate-800 text-center">
+            Cartilla de Vacunación
+          </h2>
+          <p className="text-slate-500 text-sm mt-2 mb-8 text-center max-w-sm mx-auto">
+            Revisa y administra {""}
+            <span className="text-indigo-600 font-bold">
+              el control de vacunas
+            </span>
+          </p>
+          <div className="flex flex-col gap-4">{list.map(renderItem)}</div>
+        </>
       ) : (
-        <div className="bg-slate-50/50 border border-slate-200 border-dashed rounded-xl p-10 text-center">
-          <svg
-            className="w-12 h-12 text-slate-300 mx-auto mb-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        <div className="flex flex-col items-center justify-center py-20 gap-4">
+          <div className="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-10 h-10 text-indigo-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
               strokeWidth={1.5}
-              d="M6 12L3.269 3.125A59.769 59.769 0 0121.485 12 59.768 59.768 0 013.27 20.875L5.999 12Zm0 0h7.5"
-            />
-          </svg>
-          <h3 className="text-sm font-bold text-slate-800 mb-2">
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <h2 className="font-black text-2xl text-slate-800">
             No hay vacunas registradas
-          </h3>
-          <p className="text-xs text-slate-500 max-w-xs mx-auto">
-            Comienza agregando una vacuna usando el formulario.
+          </h2>
+          <p className="text-slate-500 text-sm text-center max-w-xs">
+            Aún no tienes vacunas registradas.{" "}
+            <span className="text-indigo-600 font-bold">
+              ¡Agrega la primera!
+            </span>
           </p>
           {onAdd && (
             <button
@@ -71,7 +80,7 @@ const ListVaccinations = ({
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              Añadir Vacuna
+              Añadir vacuna
             </button>
           )}
         </div>
