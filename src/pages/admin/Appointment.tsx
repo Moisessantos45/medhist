@@ -4,6 +4,7 @@ import ReturnLink from "@/components/atoms/ReturnLink";
 import FormAppointmentFeature from "@/features/appointments/components/FormAppointmentFeature";
 import ListAppointmentsFeature from "@/features/appointments/components/ListAppointmentsFeature";
 import useAppointmentStore from "@/store/appointment";
+import ToggleFormButton from "@/components/atoms/ToggleFormButton";
 
 const Appointment = () => {
   const { list, showForm, setShowForm } = useAppointmentStore();
@@ -16,13 +17,10 @@ const Appointment = () => {
         <ReturnLink to={`${getUrl()}`} title="Volver a Pacientes" />
       </nav>
       {(list.length > 0 || !showForm) && (
-        <button
-          type="button"
-          className="bg-indigo-600 uppercase font-bold mx-10 p-3 rounded-md text-white mb-10 md:hidden"
-          onClick={() => setShowForm(!showForm)}
-        >
-          {showForm ? "Ocultar Form" : "Mostrar Form"}
-        </button>
+        <ToggleFormButton
+          isOpen={showForm}
+          onToggle={() => setShowForm(!showForm)}
+        />
       )}
 
       <div className="flex flex-col md:flex-row gap-10 justify-center">

@@ -4,6 +4,7 @@ import ReturnLink from "@/components/atoms/ReturnLink";
 import FormVaccinationFeature from "@/features/vaccinations/components/FormVaccinationFeature";
 import ListVaccinationsFeature from "@/features/vaccinations/components/ListVaccinationsFeature";
 import useVaccinationStore from "@/store/veccination";
+import ToggleFormButton from "@/components/atoms/ToggleFormButton";
 
 const Vaccination = () => {
   const { list, showForm, setShowForm } = useVaccinationStore();
@@ -16,13 +17,10 @@ const Vaccination = () => {
         <ReturnLink to={`${getUrl()}`} title="Volver a Pacientes" />
       </nav>
       {(list.length > 0 || !showForm) && (
-        <button
-          type="button"
-          className="bg-indigo-600 uppercase font-bold mx-10 p-3 rounded-md text-white mb-10 md:hidden"
-          onClick={() => setShowForm(!showForm)}
-        >
-          {showForm ? "Ocultar Form" : "Mostrar Form"}
-        </button>
+        <ToggleFormButton
+          isOpen={showForm}
+          onToggle={() => setShowForm(!showForm)}
+        />
       )}
 
       <div className="flex flex-col md:flex-row gap-10 justify-center">

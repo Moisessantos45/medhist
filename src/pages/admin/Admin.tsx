@@ -1,3 +1,4 @@
+import ToggleFormButton from "@/components/atoms/ToggleFormButton";
 import FormPatientFeature from "@/features/patients/components/FormPatientFeature";
 import ListPatientsFeature from "@/features/patients/components/ListPatientsFeature";
 import usePatientStore from "@/store/patient";
@@ -8,13 +9,10 @@ const Admin = () => {
   return (
     <section className="flex flex-col md:flex-row gap-3 justify-center p-4">
       {list.length > 0 && (
-        <button
-          type="button"
-          className="bg-indigo-600 uppercase font-bold mx-10 p-3 rounded-md text-white mb-10 md:hidden"
-          onClick={() => setShowForm(!showForm)}
-        >
-          {showForm ? "Ocultar Form" : "Mostrar Form"}
-        </button>
+        <ToggleFormButton
+          isOpen={showForm}
+          onToggle={() => setShowForm(!showForm)}
+        />
       )}
 
       <div

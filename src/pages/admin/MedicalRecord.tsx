@@ -4,6 +4,7 @@ import ReturnLink from "@/components/atoms/ReturnLink";
 import FormMedicalRecordFeature from "@/features/medicalRecords/components/FormMedicalRecordFeature";
 import ListMedicalRecordsFeature from "@/features/medicalRecords/components/ListMedicalRecordsFeature";
 import useMedicalRecordStore from "@/store/medical_record";
+import ToggleFormButton from "@/components/atoms/ToggleFormButton";
 
 const MedicalRecord = () => {
   const { getUrl } = useUrlStore();
@@ -16,13 +17,10 @@ const MedicalRecord = () => {
         <ReturnLink to={`${getUrl()}`} title="regresar" />
       </nav>
       {(list.length > 0 || !showForm) && (
-        <button
-          type="button"
-          className="bg-indigo-600 uppercase font-bold mx-10 p-3 rounded-md text-white mb-10 md:hidden"
-          onClick={() => setShowForm(!showForm)}
-        >
-          {showForm ? "Ocultar Form" : "Mostrar Form"}
-        </button>
+        <ToggleFormButton
+          isOpen={showForm}
+          onToggle={() => setShowForm(!showForm)}
+        />
       )}
 
       <section className="flex gap-3 flex-col md:flex-row w-full justify-center">
