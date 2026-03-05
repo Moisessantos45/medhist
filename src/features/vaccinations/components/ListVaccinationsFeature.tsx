@@ -4,7 +4,8 @@ import ListVaccinations from "@/components/organisms/vaccinations/ListVaccinatio
 import ItemVaccinationFeature from "./ItemVaccinationFeature";
 
 const ListVaccinationsFeature = ({ patientId }: { patientId: number }) => {
-  const { list, pagination, getAll, changePage } = useVaccinationStore();
+  const { list, pagination, getAll, changePage, setShowForm } =
+    useVaccinationStore();
 
   useEffect(() => {
     if (patientId) {
@@ -17,6 +18,10 @@ const ListVaccinationsFeature = ({ patientId }: { patientId: number }) => {
       list={list}
       pagination={pagination}
       onPageChange={(page) => changePage(patientId, page)}
+      onAdd={() => {
+        setShowForm(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
       renderItem={(vaccination) => (
         <ItemVaccinationFeature
           key={vaccination.id}

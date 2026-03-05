@@ -24,7 +24,6 @@ const FormPatient = ({
 
   return (
     <div className="bg-white px-6 py-4 border border-slate-200 shadow-sm shadow-slate-200/50 rounded-xl mb-8 relative">
-      .
       {hiddenButton && (
         <button
           type="button"

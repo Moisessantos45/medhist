@@ -3,8 +3,10 @@ import useUrlStore from "@/store/url";
 import ReturnLink from "@/components/atoms/ReturnLink";
 import FormVaccinationFeature from "@/features/vaccinations/components/FormVaccinationFeature";
 import ListVaccinationsFeature from "@/features/vaccinations/components/ListVaccinationsFeature";
+import useVaccinationStore from "@/store/veccination";
 
 const Vaccination = () => {
+  const { list, showForm, setShowForm } = useVaccinationStore();
   const { id } = useParams();
   const { getUrl } = useUrlStore();
 
@@ -13,13 +15,28 @@ const Vaccination = () => {
       <nav>
         <ReturnLink to={`${getUrl()}`} title="Volver a Pacientes" />
       </nav>
-      
-      <div className="flex flex-col md:flex-row gap-10">
-        <div className="md:w-1/2 lg:w-2/5">
-           <FormVaccinationFeature patientId={Number(id)} />
+      {(list.length > 0 || !showForm) && (
+        <button
+          type="button"
+          className="bg-indigo-600 uppercase font-bold mx-10 p-3 rounded-md text-white mb-10 md:hidden"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? "Ocultar Form" : "Mostrar Form"}
+        </button>
+      )}
+
+      <div className="flex flex-col md:flex-row gap-10 justify-center">
+        <div
+          className={` ${showForm || list.length < 1 ? "block" : "hidden"}
+        ${list.length > 0 || showForm ? "md:block" : "hidden"} md:w-1/2 lg:w-2/5`}
+        >
+          <FormVaccinationFeature patientId={Number(id)} />
         </div>
-        <div className="md:w-1/2 lg:w-3/5 h-screen md:overflow-y-scroll md:pr-4 pb-10 custom-scrollbar">
-           <ListVaccinationsFeature patientId={Number(id)} />
+
+        <div
+          className={`${list.length < 1 ? "h-screen" : "h-auto"} md:w-1/2 lg:w-3/6`}
+        >
+          <ListVaccinationsFeature patientId={Number(id)} />
         </div>
       </div>
     </section>

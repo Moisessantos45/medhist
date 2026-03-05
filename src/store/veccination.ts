@@ -18,6 +18,7 @@ interface VaccinationState {
   loading: boolean;
   alertState: AlertProps;
   pagination: Pagination;
+  showForm: boolean;
   changePage: (id: number, page: number) => void;
   getAll: (id: number, page?: number) => Promise<void>;
   register: (data: Partial<Vaccination>) => Promise<void>;
@@ -25,12 +26,14 @@ interface VaccinationState {
   remove: (id: number) => Promise<void>;
   updateField: (field: keyof Partial<Vaccination>, value: string) => void;
   clearData: () => void;
+  closeForm: () => void;
 
   setData: (data: Vaccination) => void;
   setList: (data: Vaccination[]) => void;
   setLoading: (loading: boolean) => void;
   setAlertState: (state: AlertProps) => void;
   setPagination: (pagination: Pagination) => void;
+  setShowForm: (show: boolean) => void;
 }
 
 const useVaccinationStore = create<VaccinationState>((set, get) => ({
@@ -39,6 +42,7 @@ const useVaccinationStore = create<VaccinationState>((set, get) => ({
   loading: false,
   alertState: { error: false, msg: "" },
   pagination: { ...initialPagination },
+  showForm: false,
 
   changePage: (id, page) => {
     get().setPagination({ ...get().pagination, page });
@@ -200,6 +204,9 @@ const useVaccinationStore = create<VaccinationState>((set, get) => ({
   clearData: () => {
     set({ data: { ...initialVaccination } });
   },
+  closeForm: () => {
+    set({ showForm: false, data: { ...initialVaccination } });
+  },
   setData: (data) => {
     set({ data });
   },
@@ -214,6 +221,9 @@ const useVaccinationStore = create<VaccinationState>((set, get) => ({
   },
   setPagination: (pagination) => {
     set({ pagination });
+  },
+  setShowForm: (show) => {
+    set({ showForm: show });
   },
 }));
 

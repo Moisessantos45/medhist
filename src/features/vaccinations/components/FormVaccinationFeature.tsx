@@ -7,11 +7,12 @@ const FormVaccinationFeature = ({ patientId }: { patientId: number }) => {
     alertState,
     data,
     register,
+    showForm,
     updateProfile,
     updateField,
     setAlertState,
-    clearData
-      
+    clearData,
+    closeForm,
   } = useVaccinationStore();
   const id = data?.id || null;
 
@@ -40,9 +41,13 @@ const FormVaccinationFeature = ({ patientId }: { patientId: number }) => {
       data={data}
       alertState={alertState}
       id={id}
+      hiddenButton={showForm}
       onSubmit={handleSubmit}
       onChange={updateField}
-      onCancel={clearData}
+      onCancel={() => {
+        clearData();
+        closeForm();
+      }}
     />
   );
 };
