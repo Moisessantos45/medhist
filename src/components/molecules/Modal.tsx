@@ -13,13 +13,9 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-        
-        {/* Header */}
         <div className="flex justify-between items-center p-4 border-b">
-          {title ? (
+          {title && (
             <h3 className="font-bold text-lg text-gray-800">{title}</h3>
-          ) : (
-            <div></div> // Empty div to keep flex space-between working for the button
           )}
           <button
             onClick={onClose}
@@ -43,7 +39,6 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
           </button>
         </div>
 
-        {/* Content */}
         <div className="p-5">{children}</div>
       </div>
     </div>
