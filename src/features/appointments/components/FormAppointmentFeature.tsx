@@ -6,11 +6,13 @@ const FormAppointmentFeature = ({ patientId }: { patientId: number }) => {
   const {
     alertState,
     data,
+    showForm,
     register,
     updateProfile,
     updateField,
     setAlertState,
-    clearData
+    clearData,
+    closeForm,
   } = useAppointmentStore();
   const id = data?.id || null;
 
@@ -23,7 +25,7 @@ const FormAppointmentFeature = ({ patientId }: { patientId: number }) => {
     }
 
     setAlertState({ msg: "Guardando...", error: false });
-    console.log("Submitting appointment data:",patientId, data);
+    console.log("Submitting appointment data:", patientId, data);
     if (id) {
       await updateProfile(id, data);
     } else {
@@ -36,9 +38,13 @@ const FormAppointmentFeature = ({ patientId }: { patientId: number }) => {
       data={data}
       alertState={alertState}
       isEditing={!!id}
+      hiddenButton={showForm}
       onSubmit={handleSubmit}
       onChange={updateField}
-      onCancel={clearData}
+      onCancel={() => {
+        clearData();
+        closeForm();
+      }}
     />
   );
 };

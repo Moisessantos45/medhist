@@ -18,6 +18,7 @@ interface AppointmentState {
   loading: boolean;
   alertState: AlertProps;
   pagination: Pagination;
+  showForm: boolean;
   changePage: (id: number, page: number) => void;
   getAll: (id: number, page?: number) => Promise<void>;
   register: (data: Partial<Appointment>) => Promise<void>;
@@ -25,12 +26,14 @@ interface AppointmentState {
   remove: (id: number) => Promise<void>;
   updateField: (field: keyof Partial<Appointment>, value: string) => void;
   clearData: () => void;
+  closeForm: () => void;
 
   setData: (data: Appointment) => void;
   setList: (data: Appointment[]) => void;
   setLoading: (loading: boolean) => void;
   setAlertState: (state: AlertProps) => void;
   setPagination: (pagination: Pagination) => void;
+  setShowForm: (show: boolean) => void;
 }
 
 const useAppointmentStore = create<AppointmentState>((set, get) => ({
@@ -39,6 +42,7 @@ const useAppointmentStore = create<AppointmentState>((set, get) => ({
   loading: false,
   alertState: { error: false, msg: "" },
   pagination: { ...initialPagination },
+  showForm: false,
   changePage: (id, page) => {
     get().setPagination({ ...get().pagination, page });
     get().getAll(id, page);
@@ -195,6 +199,9 @@ const useAppointmentStore = create<AppointmentState>((set, get) => ({
   clearData: () => {
     set({ data: { ...initialAppointment } });
   },
+  closeForm: () => {
+    set({ showForm: false, data: { ...initialAppointment } });
+  },
   setData: (data) => {
     set({ data });
   },
@@ -209,6 +216,9 @@ const useAppointmentStore = create<AppointmentState>((set, get) => ({
   },
   setPagination: (pagination) => {
     set({ pagination });
+  },
+  setShowForm: (show) => {
+    set({ showForm: show });
   },
 }));
 
