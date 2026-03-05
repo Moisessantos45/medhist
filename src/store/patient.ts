@@ -15,6 +15,7 @@ interface PatientState {
   loading: boolean;
   alertState: AlertProps;
   pagination: Pagination;
+  showForm: boolean;
   changePage: (page: number) => void;
   get: (id: string) => Promise<void>;
   getAll: (page?: number) => Promise<void>;
@@ -23,12 +24,14 @@ interface PatientState {
   remove: (id: number) => Promise<void>;
   updateField: (field: keyof Partial<Patient>, value: string) => void;
   clearData: () => void;
+  closeForm: () => void;
 
   setData: (data: Patient) => void;
   setList: (data: Patient[]) => void;
   setLoading: (loading: boolean) => void;
   setAlertState: (state: AlertProps) => void;
   setPagination: (pagination: Pagination) => void;
+  setShowForm: (show: boolean) => void;
 }
 
 const usePatientStore = create<PatientState>((set, get) => ({
@@ -37,6 +40,7 @@ const usePatientStore = create<PatientState>((set, get) => ({
   loading: false,
   alertState: { error: false, msg: "" },
   pagination: { ...initialPagination },
+  showForm: false,
   changePage: (page) => {
     get().setPagination({ ...get().pagination, page });
     get().getAll(page);
@@ -151,7 +155,6 @@ const usePatientStore = create<PatientState>((set, get) => ({
       set({ loading: false });
     }
   },
-  clearData: () => set({ data: { ...initialPatient } }),
   remove: async (id: number) => {
     try {
       await apiPublic.patch(
@@ -180,11 +183,17 @@ const usePatientStore = create<PatientState>((set, get) => ({
       data: { ...state.data, [field]: value },
     }));
   },
+  clearData: () => set({ data: { ...initialPatient } }),
+  closeForm() {
+    get().clearData();
+    set({ showForm: false });
+  },
   setData: (data) => set({ data }),
   setList: (list) => set({ list }),
   setLoading: (loading) => set({ loading }),
   setAlertState: (alertState) => set({ alertState }),
   setPagination: (pagination) => set({ pagination }),
+  setShowForm: (show) => set({ showForm: show }),
 }));
 
 export default usePatientStore;

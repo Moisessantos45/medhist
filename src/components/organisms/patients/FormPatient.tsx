@@ -5,6 +5,7 @@ import Alert from "@/components/molecules/Alert";
 
 type FormPatientProps = {
   data: Partial<Patient>;
+  hiddenButton: boolean;
   alertState: { msg: string; error: boolean };
   onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
   onCancel: () => void;
@@ -13,6 +14,7 @@ type FormPatientProps = {
 
 const FormPatient = ({
   data,
+  hiddenButton,
   alertState,
   onSubmit,
   onCancel,
@@ -21,7 +23,30 @@ const FormPatient = ({
   const { msg } = alertState;
 
   return (
-    <div className="bg-white px-6 py-8 border border-slate-200 shadow-sm shadow-slate-200/50 rounded-xl mb-8">
+    <div className="bg-white px-6 py-4 border border-slate-200 shadow-sm shadow-slate-200/50 rounded-xl mb-8 relative">
+      .
+      {hiddenButton && (
+        <button
+          type="button"
+          className="text-slate-400 hover:text-slate-600 transition-colors absolute top-4 right-4"
+          onClick={onCancel}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      )}
       <h2 className="font-black text-center text-2xl text-slate-800 mb-2">
         {data?.id ? "Editar Paciente" : "Nuevo Paciente"}
       </h2>
@@ -29,9 +54,7 @@ const FormPatient = ({
         {data?.id ? "Actualiza los datos del" : "Añade un paciente y"} {""}
         <span className="text-indigo-600 font-bold">registro clínico</span>
       </p>
-
       <form onSubmit={onSubmit} className="flex flex-col gap-1">
-        {/* Row 1: Nombres */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5">
           <Input
             label="Mascota / Paciente"
@@ -53,7 +76,6 @@ const FormPatient = ({
           />
         </div>
 
-        {/* Row 2: Contacto */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5">
           <Input
             label="Email de Contacto"
@@ -75,7 +97,6 @@ const FormPatient = ({
           />
         </div>
 
-        {/* Textarea: Síntomas */}
         <div className="mb-6">
           <label
             htmlFor="sintomas"
@@ -112,7 +133,6 @@ const FormPatient = ({
           )}
         </div>
       </form>
-
       {msg && (
         <div className="mt-6">
           <Alert {...alertState} />

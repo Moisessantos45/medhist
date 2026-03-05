@@ -6,11 +6,13 @@ const FormPatientFeature = () => {
   const {
     data,
     alertState,
+    showForm,
     setAlertState,
     register,
     updateProfile,
     updateField,
     clearData,
+    closeForm,
   } = usePatientStore();
   const id = data?.id || null;
 
@@ -30,9 +32,13 @@ const FormPatientFeature = () => {
   return (
     <FormPatient
       data={data}
+      hiddenButton={showForm}
       alertState={alertState}
       onSubmit={handleSubmit}
-      onCancel={clearData}
+      onCancel={() => {
+        clearData();
+        closeForm();
+      }}
       onChange={updateField}
     />
   );

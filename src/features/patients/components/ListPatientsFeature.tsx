@@ -3,12 +3,9 @@ import usePatientStore from "@/store/patient";
 import ListPatients from "@/components/organisms/patients/ListPatients";
 import ItemPatientFeature from "./ItemPatientFeature";
 
-type ListPatientsFeatureProps = {
-  onAdd?: () => void;
-};
-
-const ListPatientsFeature = ({ onAdd }: ListPatientsFeatureProps) => {
-  const { list, getAll, loading, pagination, changePage } = usePatientStore();
+const ListPatientsFeature = () => {
+  const { list, getAll, loading, pagination, changePage, setShowForm } =
+    usePatientStore();
 
   useEffect(() => {
     getAll();
@@ -20,7 +17,10 @@ const ListPatientsFeature = ({ onAdd }: ListPatientsFeatureProps) => {
       loading={loading}
       pagination={pagination}
       onPageChange={changePage}
-      onAdd={onAdd}
+      onAdd={() => {
+        setShowForm(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
       renderItem={(patient) => (
         <ItemPatientFeature key={patient.id} patient={patient} />
       )}
