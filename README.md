@@ -1,73 +1,143 @@
-# React + TypeScript + Vite
+# 🐾 MedHist — Sistema de Gestión de Historial Clínico Veterinario
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sistema web para la gestión de pacientes (mascotas), citas, expedientes médicos y vacunaciones. Diseñado para clínicas veterinarias que necesitan administrar su historial clínico de forma centralizada.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
 
-## React Compiler
+| Tecnología                                    | Versión  | Uso                                     |
+| --------------------------------------------- | -------- | --------------------------------------- |
+| [React](https://react.dev/)                   | 19       | UI principal                            |
+| [TypeScript](https://www.typescriptlang.org/) | 5.9      | Tipado estático                         |
+| [Vite](https://vite.dev/)                     | 8 (beta) | Build tool y dev server                 |
+| [Tailwind CSS](https://tailwindcss.com/)      | 4        | Estilos utilitarios                     |
+| [React Router](https://reactrouter.com/)      | 7        | Enrutamiento SPA                        |
+| [Zustand](https://zustand-demo.pmnd.rs/)      | 5        | Manejo de estado global                 |
+| [Axios](https://axios-http.com/)              | 1.13     | Cliente HTTP                            |
+| [TanStack Query](https://tanstack.com/query)  | 5        | Cache y sincronización de datos remotos |
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+---
 
-## Expanding the ESLint configuration
+## Estructura de carpetas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── App.tsx                  # Definición de rutas principales
+├── main.tsx                 # Punto de entrada
+│
+├── assets/                  # Imágenes y recursos estáticos
+│
+├── components/              # UI reutilizable (Atomic Design)
+│   ├── atoms/               # Unidades mínimas: Input, Alert, ReturnLink, AddButton, ToggleFormButton
+│   ├── molecules/           # Combinaciones: Alert compuesto, PageNavigator, SettingsNav
+│   ├── organisms/           # Bloques de UI completos por dominio
+│   │   ├── patients/        # ListPatients, FormPatient, ItemPatient, ConfirmDeletePatientModal
+│   │   ├── appointments/    # (idem para citas)
+│   │   ├── medicalRecords/  # (idem para expedientes)
+│   │   └── vaccinations/    # (idem para vacunaciones)
+│   └── templates/           # Layouts: AdminLayout, AuthLayout
+│
+├── entities/                # Tipos TypeScript (modelos de dominio)
+│   ├── patient.ts
+│   ├── appointment.ts
+│   ├── veccination.ts
+│   ├── veterinarian.ts
+│   └── pagination.ts
+│
+├── features/                # Lógica de negocio conectada a UI (Feature components)
+│   ├── patients/
+│   ├── appointments/
+│   ├── medicalRecords/
+│   ├── vaccinations/
+│   └── layout/              # Header
+│
+├── helpers/
+│   ├── crypto.ts            # Utilidades de cifrado
+│   └── mappers/             # Transformación de datos API → entidades
+│
+├── pages/
+│   ├── admin/               # Páginas protegidas
+│   │   ├── Admin.tsx        # Vista principal (pacientes + formulario)
+│   │   ├── Patients.tsx     # Lista de pacientes
+│   │   ├── Appointment.tsx  # Citas del paciente
+│   │   ├── MedicalRecord.tsx
+│   │   ├── Vaccination.tsx
+│   │   ├── Profile.tsx      # Perfil del veterinario
+│   │   └── ResetPassword.tsx
+│   └── auth/                # Páginas públicas (login, registro, etc.)
+│
+├── services/
+│   ├── api.ts               # Instancias de Axios (apiAuth / apiPublic) + interceptores
+│   └── errorHandler.ts      # Manejo centralizado de errores HTTP
+│
+└── store/                   # Estado global con Zustand
+    ├── auth.ts              # Sesión y autenticación
+    ├── patient.ts           # Pacientes (CRUD + paginación + showForm)
+    ├── appointment.ts       # Citas
+    ├── medical_record.ts    # Expedientes médicos
+    ├── veccination.ts       # Vacunaciones
+    ├── veterinarian.ts      # Perfil del veterinario
+    └── url.ts               # URL base dinámica para navegación
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Arquitectura
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+El proyecto sigue una arquitectura por **dominio + capas**, combinando **Atomic Design** para los componentes de UI.
+
 ```
+Página (page)
+  └── Feature Component       ← conecta store con UI
+        ├── Store (Zustand)   ← estado global + llamadas al servicio
+        ├── Service (Axios)   ← peticiones HTTP a la API REST
+        └── Organism/Molecule ← componente de presentación puro
+```
+
+### Principios aplicados
+
+- **Atomic Design**: `atoms` → `molecules` → `organisms` → `templates` → `pages`
+- **Feature components**: separan la lógica de negocio (store, efectos) de los componentes de presentación
+- **Stores Zustand por dominio**: cada entidad tiene su propio store con estado local, acciones CRUD y paginación
+- **Dos instancias Axios**: `apiAuth` (con interceptor de 401/500 para logout automático) y `apiPublic` (sin autenticación)
+- **Mappers**: transforman los datos crudos de la API al modelo de dominio interno
+- **Rutas protegidas**: `AdminLayout` valida sesión con `getSession()` antes de renderizar las páginas del área admin
+
+---
+
+## Variables de entorno
+
+Crea un archivo `.env` en la raíz del proyecto:
+
+```env
+VITE_API=host
+```
+
+---
+
+## Comandos
+
+```bash
+# Instalar dependencias
+bun install
+
+# Iniciar servidor de desarrollo
+bun run dev
+
+# Compilar para producción
+bun run build
+
+# Previsualizar build
+bun run preview
+
+# Lint
+bun run lint
+```
+
+---
+
+## Requisitos previos
+
+- Node.js ≥ 22
+- Backend REST corriendo (ver variable `VITE_API`)
