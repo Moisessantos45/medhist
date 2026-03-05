@@ -20,7 +20,7 @@ const ListVaccinations = ({
 }: ListVaccinationsProps) => {
   return (
     <>
-      {list.length > 1 ? (
+      {list.length ? (
         <>
           <h2 className="font-black text-2xl text-slate-800 text-center">
             Cartilla de Vacunación

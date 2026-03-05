@@ -20,7 +20,7 @@ const ListAppointments = ({
 }: ListAppointmentsProps) => {
   return (
     <>
-      {list.length > 2 ? (
+      {list.length ? (
         <>
           <h2 className="font-black text-2xl text-slate-800 text-center">
             Listado de Citas
