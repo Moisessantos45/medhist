@@ -16,7 +16,7 @@ const Appointment = () => {
       <nav>
         <ReturnLink to={`${getUrl()}`} title="Volver a Pacientes" />
       </nav>
-      {(list.length > 0 || !showForm) && (
+      {(list.length > 0 || showForm) && (
         <ToggleFormButton
           isOpen={showForm}
           onToggle={() => setShowForm(!showForm)}

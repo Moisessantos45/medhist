@@ -16,7 +16,7 @@ const MedicalRecord = () => {
       <nav>
         <ReturnLink to={`${getUrl()}`} title="regresar" />
       </nav>
-      {(list.length > 0 || !showForm) && (
+      {(list.length > 0 || showForm) && (
         <ToggleFormButton
           isOpen={showForm}
           onToggle={() => setShowForm(!showForm)}

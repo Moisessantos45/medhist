@@ -8,7 +8,7 @@ const Admin = () => {
 
   return (
     <section className="flex flex-col md:flex-row gap-3 justify-center p-4">
-      {list.length > 0 && (
+      {(list.length > 0 || showForm) && (
         <ToggleFormButton
           isOpen={showForm}
           onToggle={() => setShowForm(!showForm)}
