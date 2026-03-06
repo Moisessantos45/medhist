@@ -31,16 +31,36 @@ const Register = () => {
       return;
     }
 
+    const nameRegex = /^[a-zA-ZÀ-ÿÑñ\s'-]+$/;
+    const hasRepeatedChars = /(.)\1{3,}/.test(userName);
+
+    if (
+      !nameRegex.test(userName) ||
+      userName.trim().length < 3 ||
+      hasRepeatedChars
+    ) {
+      setAlertState({ msg: "Ingresa un nombre válido", error: true });
+      return;
+    }
+
     if (password !== confirmPassword) {
       setAlertState({
-        msg: "los password no son iguales",
+        msg: "las contraseñas no son iguales",
+        error: true,
+      });
+      return;
+    }
+
+    if (phone.length < 10 || phone.length > 13) {
+      setAlertState({
+        msg: "El teléfono debe tener entre 10 y 13 dígitos",
         error: true,
       });
       return;
     }
 
     if (password.length < 6) {
-      setAlertState({ msg: "el password es muy corto", error: true });
+      setAlertState({ msg: "la contraseña es muy corta", error: true });
       return;
     }
 
@@ -99,7 +119,8 @@ const Register = () => {
               type="tel"
               inputMode="tel"
               required={true}
-              placeholder="10 dígitos mínimo"
+              maxLength={13}
+              placeholder="10–13 dígitos"
               value={phone}
               onChange={(e) => dispatch({ phone: e.target.value })}
             />
