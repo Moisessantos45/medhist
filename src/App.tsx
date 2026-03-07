@@ -1,25 +1,37 @@
 import "./App.css";
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import AuthLayout from "./components/templates/AuthLayout";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import ForgotPassword from "./pages/auth/ForgotPassword";
-import RecoverPassword from "./pages/auth/RecoverPassword";
-import ConfirmAccount from "./pages/auth/ConfirmAccount";
 import AdminLayout from "./components/templates/AdminLayout";
-import Admin from "./pages/admin/Admin";
-import Profile from "./pages/admin/Profile";
-import ResetPassword from "./pages/admin/ResetPassword";
-import Patients from "./pages/admin/Patients";
-import MedicalRecord from "./pages/admin/MedicalRecord";
-import Appointment from "./pages/admin/Appointment";
-import Vaccination from "./pages/admin/Vaccination";
 
+const Login = lazy(() => import("./pages/auth/Login"));
+const Register = lazy(() => import("./pages/auth/Register"));
+const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
+const RecoverPassword = lazy(() => import("./pages/auth/RecoverPassword"));
+const ConfirmAccount = lazy(() => import("./pages/auth/ConfirmAccount"));
+
+const Admin = lazy(() => import("./pages/admin/Admin"));
+const Profile = lazy(() => import("./pages/admin/Profile"));
+const ResetPassword = lazy(() => import("./pages/admin/ResetPassword"));
+const Patients = lazy(() => import("./pages/admin/Patients"));
+const MedicalRecord = lazy(() => import("./pages/admin/MedicalRecord"));
+const Appointment = lazy(() => import("./pages/admin/Appointment"));
+const Vaccination = lazy(() => import("./pages/admin/Vaccination"));
+
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
 const App = createBrowserRouter([
   {
     path: "/",
-    element: <AuthLayout />,
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AuthLayout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
@@ -45,7 +57,11 @@ const App = createBrowserRouter([
   },
   {
     path: "/admin/:urlToken",
-    element: <AdminLayout />,
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AdminLayout />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
@@ -56,16 +72,16 @@ const App = createBrowserRouter([
         element: <Patients />,
       },
       {
-        path:"patient/medical-record/:id",
-        element:<MedicalRecord/>
+        path: "patient/medical-record/:id",
+        element: <MedicalRecord />,
       },
       {
-        path:"patient/appointment/:id",
-        element:<Appointment/>
+        path: "patient/appointment/:id",
+        element: <Appointment />,
       },
       {
-        path:"patient/vaccination/:id",
-        element:<Vaccination/>
+        path: "patient/vaccination/:id",
+        element: <Vaccination />,
       },
       {
         path: "profile",
@@ -78,9 +94,9 @@ const App = createBrowserRouter([
     ],
   },
   {
-    path:"*",
-    element:<h1>Pagina no existe</h1>
-  }
+    path: "*",
+    element: <h1>Pagina no existe</h1>,
+  },
 ]);
 
 export default App;
