@@ -65,7 +65,7 @@ const useAuthStore = create<AuthState>((set, get) => ({
       set({
         alertState: {
           error: false,
-          msg: "Registro exitoso, por favor inicia sesión",
+          msg: "Registro exitoso, por favor verifica tu correo electrónico",
         },
       });
     } catch (error) {
