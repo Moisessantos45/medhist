@@ -1,4 +1,5 @@
-import { useState, type FC } from "react";
+import { useState, memo, type FC } from "react";
+import { useShallow } from "zustand/react/shallow";
 import usePatientStore from "@/store/patient";
 import ItemPatient from "@/components/organisms/patients/ItemPatient";
 import ConfirmDeletePatientModal from "@/components/organisms/patients/ConfirmDeletePatientModal";
@@ -9,9 +10,11 @@ type ItemPatientFeatureProps = {
   patient: Patient;
 };
 
-const ItemPatientFeature: FC<ItemPatientFeatureProps> = ({ patient }) => {
+const ItemPatientFeature: FC<ItemPatientFeatureProps> = memo(({ patient }) => {
   const { getUrl } = useUrlStore();
-  const { setData, remove } = usePatientStore();
+  const { setData, remove } = usePatientStore(
+    useShallow((s) => ({ setData: s.setData, remove: s.remove })),
+  );
   const [isOpen, setIsOpen] = useState(false);
 
   const handleEdit = () => {
@@ -36,6 +39,6 @@ const ItemPatientFeature: FC<ItemPatientFeatureProps> = ({ patient }) => {
       />
     </>
   );
-};
+});
 
 export default ItemPatientFeature;

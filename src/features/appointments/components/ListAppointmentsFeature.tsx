@@ -1,11 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
+import { useShallow } from "zustand/react/shallow";
 import useAppointmentStore from "@/store/appointment";
 import ListAppointments from "@/components/organisms/appointments/ListAppointments";
 import ItemAppointmentFeature from "./ItemAppointmentFeature";
 
-const ListAppointmentsFeature = ({ patientId }: { patientId: number }) => {
+const ListAppointmentsFeature = memo(({ patientId }: { patientId: number }) => {
   const { list, pagination, getAll, changePage, setShowForm } =
-    useAppointmentStore();
+    useAppointmentStore(
+      useShallow((s) => ({
+        list: s.list,
+        pagination: s.pagination,
+        getAll: s.getAll,
+        changePage: s.changePage,
+        setShowForm: s.setShowForm,
+      })),
+    );
 
   useEffect(() => {
     if (patientId) {
@@ -30,6 +39,6 @@ const ListAppointmentsFeature = ({ patientId }: { patientId: number }) => {
       )}
     />
   );
-};
+});
 
 export default ListAppointmentsFeature;

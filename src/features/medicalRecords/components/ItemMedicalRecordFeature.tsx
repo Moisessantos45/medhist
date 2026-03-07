@@ -1,4 +1,5 @@
-import { useState, type FC } from "react";
+import { useState, memo, type FC } from "react";
+import { useShallow } from "zustand/react/shallow";
 import type { MedicalRecord } from "@/entities/patient";
 import useMedicalRecordStore from "@/store/medical_record";
 import ItemMedicalRecord from "@/components/organisms/medicalRecords/ItemMedicalRecord";
@@ -8,10 +9,12 @@ type ItemMedicalRecordFeatureProps = {
   record: MedicalRecord;
 };
 
-const ItemMedicalRecordFeature: FC<ItemMedicalRecordFeatureProps> = ({
+const ItemMedicalRecordFeature: FC<ItemMedicalRecordFeatureProps> =memo(({
   record,
 }) => {
-  const { setData, remove } = useMedicalRecordStore();
+  const { setData, remove } = useMedicalRecordStore(
+    useShallow((s) => ({ setData: s.setData, remove: s.remove })),
+  );
   const [isOpen, setIsOpen] = useState(false);
 
   const handleEdit = () => {
@@ -39,6 +42,6 @@ const ItemMedicalRecordFeature: FC<ItemMedicalRecordFeatureProps> = ({
       />
     </>
   );
-};
+});
 
 export default ItemMedicalRecordFeature;

@@ -1,11 +1,20 @@
-import { useEffect } from "react";
+import { useEffect,memo } from "react";
+import { useShallow } from "zustand/react/shallow";
 import useVaccinationStore from "@/store/veccination";
 import ListVaccinations from "@/components/organisms/vaccinations/ListVaccinations";
 import ItemVaccinationFeature from "./ItemVaccinationFeature";
 
-const ListVaccinationsFeature = ({ patientId }: { patientId: number }) => {
+const ListVaccinationsFeature = memo(({ patientId }: { patientId: number }) => {
   const { list, pagination, getAll, changePage, setShowForm } =
-    useVaccinationStore();
+    useVaccinationStore(
+      useShallow((s) => ({
+        list: s.list,
+        pagination: s.pagination,
+        getAll: s.getAll,
+        changePage: s.changePage,
+        setShowForm: s.setShowForm,
+      })),
+    );
 
   useEffect(() => {
     if (patientId) {
@@ -30,6 +39,6 @@ const ListVaccinationsFeature = ({ patientId }: { patientId: number }) => {
       )}
     />
   );
-};
+});
 
 export default ListVaccinationsFeature;

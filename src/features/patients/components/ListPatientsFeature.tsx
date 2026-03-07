@@ -1,11 +1,21 @@
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
+import { useShallow } from "zustand/react/shallow";
 import usePatientStore from "@/store/patient";
 import ListPatients from "@/components/organisms/patients/ListPatients";
 import ItemPatientFeature from "./ItemPatientFeature";
 
-const ListPatientsFeature = () => {
+const ListPatientsFeature = memo(() => {
   const { list, getAll, loading, pagination, changePage, setShowForm } =
-    usePatientStore();
+    usePatientStore(
+      useShallow((s) => ({
+        list: s.list,
+        getAll: s.getAll,
+        loading: s.loading,
+        pagination: s.pagination,
+        changePage: s.changePage,
+        setShowForm: s.setShowForm,
+      })),
+    );
 
   useEffect(() => {
     getAll();
@@ -26,6 +36,6 @@ const ListPatientsFeature = () => {
       )}
     />
   );
-};
+});
 
 export default ListPatientsFeature;
