@@ -6,7 +6,7 @@ import useUrlStore from "@/store/url";
 import Input from "@/components/atoms/Input";
 
 const Login = () => {
-  const { login, alertState, authenticated, loading, getToken, setLoading } =
+  const { login, alertState, authenticated, getToken, setLoading } =
     useAuthStore();
   const { urlToken } = useUrlStore();
   const [email, setEmail] = useState("");
@@ -30,13 +30,6 @@ const Login = () => {
 
   const { msg } = alertState;
 
-  if (loading)
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div>Validando sesión...</div>
-      </div>
-    );
-
   if (authenticated)
     return <Navigate to={`/admin/${urlToken || "dashboard"}`} replace />;
   return (
@@ -46,9 +39,7 @@ const Login = () => {
           <span className="text-indigo-600 font-bold">Med</span>
           <span className="text-slate-800 font-black">Hist</span>
         </h1>
-        <h1 className="text-2xl font-bold mb-3">
-          Inicia sesión
-        </h1>
+        <h1 className="text-2xl font-bold mb-3">Inicia sesión</h1>
         <p className="text-sm text-slate-500 mb-8 max-w-xs mx-auto">
           Ingresa a tu cuenta para administrar a tus{" "}
           <span className="text-indigo-600 font-bold">pacientes</span>
