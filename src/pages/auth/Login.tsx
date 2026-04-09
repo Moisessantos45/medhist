@@ -6,8 +6,15 @@ import useUrlStore from "@/store/url";
 import Input from "@/components/atoms/Input";
 
 const Login = () => {
-  const { login, alertState, authenticated, getToken, setLoading } =
-    useAuthStore();
+  const {
+    login,
+    forwardEmailVerification,
+    alertState,
+    authenticated,
+    accountNotVerified,
+    getToken,
+    setLoading,
+  } = useAuthStore();
   const { urlToken } = useUrlStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,6 +24,10 @@ const Login = () => {
     e.preventDefault();
 
     await login(email, password);
+  };
+
+  const resendEmailVerification = () => {
+    forwardEmailVerification(email);
   };
 
   useEffect(() => {
@@ -50,6 +61,17 @@ const Login = () => {
         {msg && (
           <div className="mb-6">
             <Alert {...alertState} />
+          </div>
+        )}
+
+        {accountNotVerified && (
+          <div className="mb-6">
+          <button
+            onClick={resendEmailVerification}
+            className="w-full py-3 bg-yellow-500 text-white font-bold uppercase text-xs tracking-wider rounded-lg shadow-sm transition-colors hover:bg-yellow-600 mb-4 cursor-pointer"
+          >
+            Reenviar email de verificación
+          </button>
           </div>
         )}
         <form onSubmit={handleLoginSubmit} className="flex flex-col gap-2">

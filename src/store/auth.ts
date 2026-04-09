@@ -9,6 +9,7 @@ import veterinarianMapper from "@/helpers/mappers/veterinarianMapper";
 interface AuthState {
   loading: boolean;
   authenticated: boolean;
+  accountNotVerified: boolean;
   alertState: AlertProps;
   getSession: () => Promise<void>;
   getToken: () => string | null;
@@ -20,6 +21,7 @@ interface AuthState {
   ) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  forwardEmailVerification: (email: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (password: string, token: string) => Promise<void>;
   updatePassword: (
@@ -29,12 +31,14 @@ interface AuthState {
   setLoading: (loading: boolean) => void;
   setAuthenticated: (authenticated: boolean) => void;
   setAlertState: (alertState: AlertProps) => void;
+  setAccountNotVerified: (accountNotVerified: boolean) => void;
 }
 
 const useAuthStore = create<AuthState>((set, get) => ({
   loading: true,
   authenticated: false,
   alertState: { error: false, msg: "" },
+  accountNotVerified: false,
   getSession: async () => {
     const token = get().getToken();
     if (!token) {
@@ -108,8 +112,17 @@ const useAuthStore = create<AuthState>((set, get) => ({
 
       set({ authenticated: true, alertState: { error: false, msg: "" } });
     } catch (error) {
-      const { msg } = ErrorHandler(error);
-      set({ alertState: { error: true, msg } });
+      const { msg, status, code } = ErrorHandler(error);
+      set({
+        alertState: {
+          error: true,
+          msg:
+            status === 403 && code === "EMAIL_NOT_VERIFIED"
+              ? "EMAIL_NOT_VERIFIED"
+              : msg,
+        },
+        accountNotVerified: status === 403 && code === "EMAIL_NOT_VERIFIED",
+      });
     } finally {
       set({ loading: false });
     }
@@ -135,6 +148,30 @@ const useAuthStore = create<AuthState>((set, get) => ({
 
       set({
         authenticated: false,
+      });
+    } catch (error) {
+      const { msg } = ErrorHandler(error);
+      set({ alertState: { error: true, msg } });
+    } finally {
+      setTimeout(() => {
+        set({ alertState: { error: false, msg: "" } });
+      }, 3000);
+
+      set({ loading: false });
+    }
+  },
+  forwardEmailVerification: async (email: string) => {
+    set({ loading: true });
+    try {
+      await apiAuth.post("/auth/forward-email-verification", {
+        email,
+      });
+
+      set({
+        alertState: {
+          error: false,
+          msg: "Correo de verificación reenviado, por favor revisa tu bandeja de entrada",
+        },
       });
     } catch (error) {
       const { msg } = ErrorHandler(error);
@@ -232,6 +269,8 @@ const useAuthStore = create<AuthState>((set, get) => ({
   setLoading: (loading: boolean) => set({ loading }),
   setAuthenticated: (authenticated: boolean) => set({ authenticated }),
   setAlertState: (alertState: AlertProps) => set({ alertState }),
+  setAccountNotVerified: (accountNotVerified: boolean) =>
+    set({ accountNotVerified }),
 }));
 
 export default useAuthStore;
